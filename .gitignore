@@ -1,0 +1,10 @@
+# Entornos virtuales
+.venv/
+.venv*/
+__pycache__/
+
+# Archivos compilados
+*.pyc
+
+# Sistema
+desktop.ini
