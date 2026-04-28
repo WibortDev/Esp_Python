@@ -4,4 +4,4 @@ matplotlib
 seaborn
 imbalanced-learn
 category-encoders
-tensorflow==2.16.0
+tensorflow==2.16.2
