@@ -17,13 +17,15 @@ modelo.compile(
     )
 
 print("Comenzando entrenamiento...")
-historial = modelo.fit(celsius, fahrenheit, epochs=1000, verbose=False)
+historial = modelo.fit(celsius, fahrenheit, epochs=100, verbose=False)
 print( "Modelo entrenado!")
 
 import matplotlib.pyplot as plt 
 plt.xlabel("# Epoca")
 plt.ylabel("Magnitud de pérdida") 
 plt.plot(historial.history["loss"])
+plt.savefig("resultado.png")
+plt.close()
 
 print( "Hagamos una predicción!")
 # Convert the list to a NumPy array
