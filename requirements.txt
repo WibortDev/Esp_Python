@@ -5,3 +5,4 @@ seaborn
 imbalanced-learn
 category-encoders
 tensorflow==2.16.2
+openpyxl>=3.1
