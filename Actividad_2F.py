@@ -18,7 +18,7 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.utils import set_random_seed
 
 # ----------------------------
-# 1) DESCARGA DEL DATASET (todas las filas del subconjunto BOGOTÁ D.C.)
+# 1 - DESCARGA DEL DATASET (todas las filas del subconjunto BOGOTÁ D.C.)
 # ----------------------------
 url = "https://www.postdata.gov.co/api/action/datastore/search.json"
 
@@ -60,7 +60,7 @@ if len(df) < 1000:
     raise ValueError(f"El subconjunto descargado tiene {len(df)} instancias (<1000). Ajusta filtro o dataset.")
 
 # ----------------------------
-# 2) LIMPIEZA Y TIPOS
+# 2 - CALIDAD LIMPIEZA Y TIPOS
 # ----------------------------
 # y a numérico (por si viene como string con coma)
 df["PORCENTAJE_INTENTO_NO_EXITOSO"] = (
@@ -78,7 +78,7 @@ X = df.drop(columns=["PORCENTAJE_INTENTO_NO_EXITOSO", "DESC_DEPARTAMENTO"])
 y = df["PORCENTAJE_INTENTO_NO_EXITOSO"]
 
 # ----------------------------
-# 3) CARACTERIZACIÓN (texto + gráficos)
+# 3 - CARACTERIZACIÓN (texto + gráficos)
 # ----------------------------
 print("\n--- DESCRIPCIÓN (y) ---")
 print(y.describe())
@@ -106,7 +106,7 @@ plt.tight_layout()
 plt.show()
 
 # ----------------------------
-# 4) PREPROCESADO (one-hot + normalización numérica)
+# 4 - PREPROCESADO (one-hot + normalización numérica)
 # ----------------------------
 num_cols = ["ANNO","MES","DIA"]
 cat_cols = ["DESC_EMPRESA","DESC_MUNICIPIO","HORA_PICO"]
@@ -130,7 +130,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # ----------------------------
-# 5) MODELOS NO-NN
+# 5 - MODELOS NO-NN
 # ----------------------------
 # 5.1 Regresión lineal
 linreg = Pipeline(steps=[
@@ -155,7 +155,7 @@ rf.fit(X_train, y_train)
 pred_rf = rf.predict(X_test)
 
 # ----------------------------
-# 6) RED NEURONAL (Keras / TF 2.x)
+# 6 - RED NEURONAL (Keras / TF 2.x)
 # ----------------------------
 X_train_p = preprocess.fit_transform(X_train)
 X_test_p  = preprocess.transform(X_test)
@@ -193,7 +193,7 @@ plt.tight_layout()
 plt.show()
 
 # ----------------------------
-# 7) MÉTRICAS Y COMPARACIÓN GRÁFICA
+# 7 - MÉTRICAS Y COMPARACIÓN GRÁFICA
 # ----------------------------
 def metrics(y_true, y_pred):
     mae  = mean_absolute_error(y_true, y_pred)
@@ -239,13 +239,13 @@ plt.tight_layout()
 plt.show()
 
 # ----------------------------
-# 8) ANÁLISIS: TOP Año-Mes-Día-Hora
+# 8 - ANÁLISIS: TOP 10 Año-Mes-Día-Hora
 # ----------------------------
 top_real_ymdh = (
-    df.groupby(["ANNO","MES","DIA","HORA_PICO"], as_index=False)["PORCENTAJE_INTENTO_NO_EXITOSO"]
+    df.groupby(["ANNO","MES","DIA","HORA_PICO","DESC_EMPRESA"], as_index=False)["PORCENTAJE_INTENTO_NO_EXITOSO"]
       .mean()
       .sort_values("PORCENTAJE_INTENTO_NO_EXITOSO", ascending=False)
 )
 
-print("\nTop 10 (promedio) ANNO-MES-DIA-HORA con mayor % no exitoso:")
+print("\nTop 10 (promedio) ANNO-MES-DIA-HORA y PROVEEDOR con mayor % no exitoso:")
 print(top_real_ymdh.head(10))
