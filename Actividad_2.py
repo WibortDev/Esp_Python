@@ -130,18 +130,21 @@ y_pred = model.predict(X_test_p)
 print("Predicciones (primeras 10):")
 print(y_pred[:10].reshape(-1))
 
-top_real = (
-    df.groupby(["DIA", "HORA_PICO"], as_index=False)["PORCENTAJE_INTENTO_NO_EXITOSO"]
-      .mean()
-      .sort_values("PORCENTAJE_INTENTO_NO_EXITOSO", ascending=False)
+top_real_ym = (
+    df.groupby(
+        ["ANNO", "MES", "DIA", "HORA_PICO"],
+        as_index=False
+    )["PORCENTAJE_INTENTO_NO_EXITOSO"]
+    .mean()
+    .sort_values("PORCENTAJE_INTENTO_NO_EXITOSO", ascending=False)
 )
 
-print("Top 10 (promedio) día-hora con mayor % no exitoso:")
-print(top_real.head(10))
+print("Top 10 (Año-Mes-Día-Hora) con mayor % promedio no exitoso:")
+print(top_real_ym.head(10))
 
 import matplotlib.pyplot as plt
 
-top10 = top_real.head(10).copy()
+top10 = top_real_ym.head(10).copy()
 top10["dia_hora"] = top10["DIA"].astype(str) + " - " + top10["HORA_PICO"].astype(str)
 
 plt.figure(figsize=(10,5))
